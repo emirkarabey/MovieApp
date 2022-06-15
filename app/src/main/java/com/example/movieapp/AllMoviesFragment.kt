@@ -5,23 +5,27 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.movieapp.adapter.MovieAdapter
 import com.example.movieapp.entity.Movie
-import com.example.movieapp.retrofit.MovieAPI
-import com.example.movieapp.retrofit.MovieAPIService
 import com.example.movieapp.viewmodel.AllMoviesViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_all_movies.*
 
-
+@AndroidEntryPoint
 class AllMoviesFragment : Fragment() {
 
-
-    private lateinit var viewModel: AllMoviesViewModel
+    val viewModel by lazy{
+        ViewModelProvider(this,defaultViewModelProviderFactory).get(AllMoviesViewModel::class.java)
+    }
+    private lateinit var movieAdapter:MovieAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        movieAdapter = MovieAdapter()
+        val recyclerView = // adapteri bağla
+
         arguments?.let {
 
         }
@@ -37,10 +41,17 @@ class AllMoviesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(AllMoviesViewModel::class.java)
         //viewModel.getData()
-        viewModel.searchMovieByTitle("")
-
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = movieAdapter
+        viewModel.loadData()
+        viewModel.getLiveDataObserver().observe(viewLifecycleOwner,object :Observer<Movie>{
+            override fun onChanged(t: Movie?) {
+                if (t!=null){
+                    movieAdapter.setList(t)
+                    movieAdapter.notifyDataSetChanged()
+                }
+            }
+        })
     }
-
 }

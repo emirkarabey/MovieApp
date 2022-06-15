@@ -1,21 +1,15 @@
 package com.example.movieapp.viewmodel
 
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.movieapp.entity.Movie
-import com.example.movieapp.retrofit.MovieAPI
-import com.example.movieapp.retrofit.MovieAPIService
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
-import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import kotlin.math.log
+import com.example.movieapp.repo.RetrofitRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class AllMoviesViewModel :ViewModel(){
+@HiltViewModel
+class AllMoviesViewModel @Inject constructor(private val repository: RetrofitRepository):ViewModel(){
+
     /*
     val movies = MutableLiveData<List<Movie>>()
     val movieApiService = MovieAPIService()
@@ -39,6 +33,7 @@ class AllMoviesViewModel :ViewModel(){
 
      */
 
+    /*
     var omdbapiClient :MovieAPI = MovieAPIService.getData()!!
 
     fun searchMovieByTitle(movietitle: String) {
@@ -53,4 +48,18 @@ class AllMoviesViewModel :ViewModel(){
 
         })
     }
+
+     */
+
+    var liveData:MutableLiveData<Movie>
+    init {
+        liveData = MutableLiveData()
+    }
+    fun getLiveDataObserver():MutableLiveData<Movie>{
+        return liveData
+    }
+    fun loadData(){
+        repository.getMovie(liveData)
+    }
+
 }

@@ -1,8 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.home.HomeFragment"
+    android:orientation="vertical"
+    android:background="@color/back">
 
-</FrameLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/medium_padding"
+        android:layout_margin="@dimen/medium_margin"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tvLatest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/double_extra_large_size"
+            android:text="Latest"
+            android:textColor="@color/titleTextColor"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvLatest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:background="@color/rvColor"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/medium_padding"
+        android:layout_margin="@dimen/medium_margin"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tvPopular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/double_extra_large_size"
+            android:text="Popular"
+            android:textColor="@color/titleTextColor"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPopular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:background="@color/rvColor"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/medium_padding"
+        android:layout_margin="@dimen/medium_margin"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tvTopRated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/double_extra_large_size"
+            android:text="Top Rated"
+            android:textColor="@color/titleTextColor"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTopRated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:background="@color/rvColor"/>
+    </LinearLayout>
+</LinearLayout>

@@ -4,7 +4,7 @@ object Versions {
     const val appCompat = "1.4.2"
     const val material = "1.6.1"
     const val hilt = "2.42"
-    const val hiltCompiler = "2.41"
+    const val hiltCompiler = "2.42"
     const val timber = "5.0.1"
     const val room = "2.4.2"
     const val constraint = "2.1.4"

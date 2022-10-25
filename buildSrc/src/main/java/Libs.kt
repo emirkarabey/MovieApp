@@ -49,6 +49,8 @@ object Libs {
 
     object Image {
         const val coil = "io.coil-kt:coil:" + Versions.coil
+        const val glide = "com.github.bumptech.glide:glide:" + Versions.glide
+        const val glideAnnotation = "com.github.bumptech.glide:compiler:" + Versions.glide
     }
 
     object Room {
@@ -61,5 +63,9 @@ object Libs {
         const val junit = "junit:junit:" + Versions.junit
         const val testExt = "androidx.test.ext:junit:" + Versions.testExt
         const val espresso = "androidx.test.espresso:espresso-core:" + Versions.espresso
+    }
+
+    object Paging {
+        const val runtime = "androidx.paging:paging-runtime:" + Versions.paging
     }
 }

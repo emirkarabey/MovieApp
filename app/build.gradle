@@ -77,9 +77,13 @@ dependencies {
     implementation Libs.Network.okhttp
     implementation Libs.Network.interceptor
 
-    // coil
-    implementation Libs.Image.coil
-
     //Timber (log)
     implementation Libs.Log.timber
+
+    //Paging
+    implementation Libs.Paging.runtime
+
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.14.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
 }

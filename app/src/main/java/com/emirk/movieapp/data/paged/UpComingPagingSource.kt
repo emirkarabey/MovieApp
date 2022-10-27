@@ -5,13 +5,13 @@ import androidx.paging.PagingState
 import com.emirk.movieapp.data.remote.ApiService
 import com.emirk.movieapp.data.remote.model.movie_lists.Movie
 
-class PopularMoviesPagingSource(private val apiService: ApiService) :
+class UpComingPagingSource(private val apiService: ApiService) :
     PagingSource<Int, Movie>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         val page = params.key ?: STARTING_PAGE_INDEX
         return try {
-            val response = apiService.getPopularMovies(page)
+            val response = apiService.getUpcomingMovies(page)
             LoadResult.Page(
                 data = response.movies,
                 prevKey = if (page == STARTING_PAGE_INDEX) null else page.minus(1),

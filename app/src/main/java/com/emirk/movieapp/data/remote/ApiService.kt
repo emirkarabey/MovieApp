@@ -14,6 +14,13 @@ interface ApiService {
         @Query("api_key") api_key: String = ApiConstants.API_KEY
     ): MovieResponse
 
+    @GET(ApiConstants.Endpoints.LATEST)
+    suspend fun getLatestMovies(
+        @Query("page") page: Int,
+        @Query("api_key") api_key: String = ApiConstants.API_KEY
+    ): MovieResponse
+
+
     @GET(ApiConstants.Endpoints.TOP_RATED)
     suspend fun getTopRatedMovies(
         @Query("page") page: Int,
@@ -33,7 +40,7 @@ interface ApiService {
     ): MovieResponse
 
     @GET(ApiConstants.Endpoints.MOVIE_DETAILS)
-    suspend fun getUserById(
+    suspend fun getMovieDetailById(
         @Path("id") id: Int,
         @Query("api_key") api_key: String = ApiConstants.API_KEY
     ): MovieDetails

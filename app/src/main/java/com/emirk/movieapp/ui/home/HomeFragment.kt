@@ -7,21 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.emirk.movieapp.databinding.FragmentHomeBinding
+import com.emirk.movieapp.ui.adapter.ItemClickListener
 import com.emirk.movieapp.ui.adapter.MoviesAdapter
-import com.emirk.movieapp.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), ItemClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModels()
-    private val popularMoviesAdapter = MoviesAdapter()
+    private var popularMoviesAdapter = MoviesAdapter(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -36,35 +38,54 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRecycler(binding.rvPopular)
+        setupAllRecycler()
         collectData()
     }
 
-    private fun collectData(){
+    private fun collectData() {
         lifecycleScope.launch {
-            viewModel.popularMovies.data?.collectLatest {
-                when(viewModel.popularMovies.status){
-                    Resource.Status.LOADING->{
-                        //progress bar visibility aç
-                    }
-                    Resource.Status.SUCCESS->{
-                        //progress bar visibility kapat
-                        popularMoviesAdapter.submitData(it)
-                    }
-                    Resource.Status.ERROR->{
+            viewModel.popularMovies.data?.data?.collectLatest {
+                popularMoviesAdapter.submitData(it)
+            }
+            viewModel.latestMovies.data?.data?.collectLatest {
+                popularMoviesAdapter.submitData(it)
+            }
 
-                    }
-                }
+            viewModel.topRatedMovies.data?.data?.collectLatest {
+                popularMoviesAdapter.submitData(it)
+            }
+            viewModel.upComingMovies.data?.data?.collectLatest {
+                popularMoviesAdapter.submitData(it)
+            }
+            viewModel.nowPlayingMovies.data?.data?.collectLatest {
+                popularMoviesAdapter.submitData(it)
             }
         }
     }
 
-    private fun setupRecycler(recyclerView: RecyclerView){
-        recyclerView.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
-        recyclerView.adapter = popularMoviesAdapter
+    private fun setupAllRecycler() {
+        setupRecycler(binding.rvPopular)
+        setupRecycler(binding.rvLatest)
+        setupRecycler(binding.rvTopRated)
+        setupRecycler(binding.rvUpComing)
+        setupRecycler(binding.rvNowPlaying)
     }
+
+
+    private fun setupRecycler(recyclerView: RecyclerView) {
+        recyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.adapter = popularMoviesAdapter
+
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onClickMovie(id: Int) {
+        val action = HomeFragmentDirections.actionNavigationHomeToNavigationDetails(id)
+        findNavController().navigate(action)
     }
 }

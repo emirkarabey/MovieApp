@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
+import com.emirk.movieapp.data.remote.util.ApiConstants
 import com.emirk.movieapp.databinding.FragmentDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,11 +34,19 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observe()
+
     }
 
     private fun observe(){
         viewModel.movieDetailLiveData.observe(viewLifecycleOwner){
             binding.tvTitle.text = it.title
+            binding.tvFirstCategory.text = it.genres.first().name
+            binding.tvSecondCategory.text = it.genres.last().name
+            binding.tvReleaseDate.text = it.release_date
+            binding.tvOverview.text = it.overview
+            binding.tvRate.text = it.popularity.toString()
+            Glide.with(binding.ivBackDropImage).load(ApiConstants.getPosterPath(it.backdrop_path)).into(binding.ivBackDropImage)
+            Glide.with(binding.ivPoster).load(ApiConstants.getPosterPath(it.poster_path)).into(binding.ivPoster)
         }
     }
 

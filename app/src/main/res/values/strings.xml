@@ -2,7 +2,9 @@
     <string name="app_name">MovieApp</string>
     <string name="title_home">Home</string>
     <string name="title_details">Details</string>
-    <string name="tv_popular_text">Details</string>
-    <string name="tv_latest_text">Details</string>
-    <string name="tv_top_rated_text">Details</string>
+    <string name="tv_popular_text">Popular</string>
+    <string name="tv_latest_text">Latest</string>
+    <string name="tv_top_rated_text">Top Rated</string>
+    <string name="tv_up_coming_text">Up Coming</string>
+    <string name="tv_now_playing_text">Now Playing</string>
 </resources>

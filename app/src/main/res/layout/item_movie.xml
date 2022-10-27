@@ -4,13 +4,13 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/small_margin"
     android:orientation="vertical"
-    android:padding="@dimen/small_padding">
+    android:background="@color/rvColor">
 
 
     <ImageView
         android:id="@+id/ivMovie"
-        android:layout_width="wrap_content"
-        android:layout_height="130dp" />
+        android:layout_width="125dp"
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/tvTitle"
@@ -21,7 +21,8 @@
         android:textStyle="bold"
         android:maxLines="1"
         android:maxLength="10"
-        android:ellipsize="end"/>
+        android:ellipsize="end"
+        android:padding="@dimen/medium_padding"/>
 
     <TextView
         android:id="@+id/tvReleaseDate"
@@ -29,6 +30,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:textSize="@dimen/small_size"
-        android:maxLength="12"/>
+        android:maxLength="12"
+        android:padding="@dimen/medium_padding"/>
 
 </LinearLayout>

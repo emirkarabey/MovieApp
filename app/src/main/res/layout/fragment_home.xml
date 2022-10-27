@@ -1,76 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.home.HomeFragment"
+    android:background="@color/back"
     android:orientation="vertical"
-    android:background="@color/back">
+    tools:context=".ui.home.HomeFragment"
+    android:layout_marginBottom="@dimen/double_extra_large_margin">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/medium_padding"
-        android:layout_margin="@dimen/medium_margin"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/tvPopular"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/double_extra_large_size"
-            android:text="@string/tv_popular_text"
-            android:textColor="@color/titleTextColor"
-            android:layout_marginBottom="@dimen/small_margin"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvPopular"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/rvColor"/>
-    </LinearLayout>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/medium_padding"
-        android:layout_margin="@dimen/medium_margin"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/tvLatest"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/double_extra_large_size"
-            android:text="@string/tv_latest_text"
-            android:textColor="@color/titleTextColor"/>
+            android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvLatest"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:background="@color/rvColor"/>
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/medium_margin"
+                android:orientation="vertical"
+                android:padding="@dimen/medium_padding">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/medium_padding"
-        android:layout_margin="@dimen/medium_margin"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/tvTopRated"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/double_extra_large_size"
-            android:text="@string/tv_top_rated_text"
-            android:textColor="@color/titleTextColor"/>
+                <TextView
+                    android:id="@+id/tvPopular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/small_margin"
+                    android:text="@string/tv_popular_text"
+                    android:textColor="@color/titleTextColor"
+                    android:textSize="@dimen/double_extra_large_size" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTopRated"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:background="@color/rvColor"/>
-    </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvPopular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/medium_margin"
+                android:orientation="vertical"
+                android:padding="@dimen/medium_padding">
+
+                <TextView
+                    android:id="@+id/tvLatest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/small_margin"
+                    android:text="@string/tv_latest_text"
+                    android:textColor="@color/titleTextColor"
+                    android:textSize="@dimen/double_extra_large_size" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvLatest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/medium_margin"
+                android:orientation="vertical"
+                android:padding="@dimen/medium_padding">
+
+                <TextView
+                    android:id="@+id/tvTopRated"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/small_margin"
+                    android:text="@string/tv_top_rated_text"
+                    android:textColor="@color/titleTextColor"
+                    android:textSize="@dimen/double_extra_large_size" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTopRated"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/medium_margin"
+                android:orientation="vertical"
+                android:padding="@dimen/medium_padding">
+
+                <TextView
+                    android:id="@+id/tvUpComing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/small_margin"
+                    android:text="@string/tv_up_coming_text"
+                    android:textColor="@color/titleTextColor"
+                    android:textSize="@dimen/double_extra_large_size" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvUpComing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/medium_margin"
+                android:orientation="vertical"
+                android:padding="@dimen/medium_padding">
+
+                <TextView
+                    android:id="@+id/tvNowPlaying"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/small_margin"
+                    android:text="@string/tv_now_playing_text"
+                    android:textColor="@color/titleTextColor"
+                    android:textSize="@dimen/double_extra_large_size" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvNowPlaying"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.emirk.movieapp.data.remote.model.movie_lists.Movie
 import com.emirk.movieapp.databinding.ItemMovieBinding
 
-class MoviesAdapter() : PagingDataAdapter<Movie, MoviesViewHolder>(DiffCallback) {
+class MoviesAdapter(private val listener: ItemClickListener) : PagingDataAdapter<Movie, MoviesViewHolder>(DiffCallback) {
 
     object DiffCallback: DiffUtil.ItemCallback<Movie>(){
         override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
@@ -19,7 +19,7 @@ class MoviesAdapter() : PagingDataAdapter<Movie, MoviesViewHolder>(DiffCallback)
     }
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
-        holder.bind(getItem(position)!!)
+        holder.bind(getItem(position)!!,holder.itemView,listener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {

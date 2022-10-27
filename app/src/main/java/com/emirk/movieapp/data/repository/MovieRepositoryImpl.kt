@@ -63,8 +63,8 @@ class MovieRepositoryImpl @Inject constructor(
         ).flow.cachedIn(coroutineScope))
     }
 
-    override suspend fun getMovieDetailById(id: Int): MovieDetails {
-        return apiService.getMovieDetailById(id)
+    override suspend fun getMovieDetailById(id: Int): Resource<MovieDetails> {
+        return Resource.success(apiService.getMovieDetailById(id))
     }
 
     companion object {

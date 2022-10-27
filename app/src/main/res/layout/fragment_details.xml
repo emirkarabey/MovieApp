@@ -1,128 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/back"
-    android:orientation="vertical"
-    tools:context=".ui.details.DetailsFragment">
+    >
 
-    <androidx.core.widget.NestedScrollView
+    <data>
+        <variable
+            name="movieDetails"
+            type="com.emirk.movieapp.data.remote.model.movie_details.MovieDetails" />
+    </data>
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/back"
+        tools:context=".ui.details.DetailsFragment">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/ivBackDropImage"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/ivBackDropImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/iv_back_drop_content_description"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        loadBackImage="@{movieDetails.backdrop_path}"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <ImageView
+                        android:id="@+id/ivPoster"
+                        android:layout_width="wrap_content"
+                        android:layout_height="300dp"
+                        android:layout_marginTop="50dp"
+                        android:contentDescription="@string/iv_poster_content_description"
+                        android:paddingStart="@dimen/double_extra_large_padding"
+                        android:paddingTop="@dimen/double_extra_large_padding"
+                        loadImage="@{movieDetails.poster_path}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="RtlSymmetry" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="@string/iv_back_drop_content_description"/>
-
-                <ImageView
-                    android:id="@+id/ivPoster"
-                    android:layout_width="wrap_content"
-                    android:layout_height="300dp"
-                    android:layout_marginTop="50dp"
+                    android:orientation="horizontal"
                     android:paddingStart="@dimen/double_extra_large_padding"
-                    android:paddingTop="@dimen/double_extra_large_padding"
-                    android:src="@drawable/ic_launcher_background"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="@string/iv_poster_content_description"
-                    tools:ignore="RtlSymmetry" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    tools:ignore="RtlSymmetry">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingStart="@dimen/double_extra_large_padding"
-                tools:ignore="RtlSymmetry">
-                <RatingBar
-                    android:id="@+id/rBar"
-                    style="@style/Widget.AppCompat.RatingBar.Indicator"
-                    android:layout_width="wrap_content"
+                    <RatingBar
+                        android:id="@+id/rBar"
+                        style="@style/Widget.AppCompat.RatingBar.Indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:numStars="1"
+                        android:rating="5"
+                        android:stepSize="0.5"
+                        android:theme="@style/Widget.AppCompat.RatingBar" />
+
+                    <TextView
+                        android:id="@+id/tvRate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/double_extra_small_padding"
+                        android:textColor="@color/titleTextColor"
+                        android:textSize="@dimen/double_extra_large_size"
+                        tvToString="@{movieDetails.popularity}"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:numStars="1"
-                    android:rating="5"
-                    android:stepSize="0.5"
-                    android:theme="@style/Widget.AppCompat.RatingBar" />
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/double_extra_large_padding"
+                    tools:ignore="RtlSymmetry">
+
+                    <TextView
+                        android:id="@+id/tvFirstCategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/titleTextColor"
+                        android:padding="@dimen/small_padding"
+                        android:textColor="@color/back"
+                        firstCategory="@{movieDetails.genres}"/>
+
+                    <TextView
+                        android:id="@+id/tvSecondCategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/small_margin"
+                        android:background="@color/titleTextColor"
+                        android:padding="@dimen/small_padding"
+                        android:textColor="@color/back"
+                        tools:ignore="RtlSymmetry"
+                        secondCategory="@{movieDetails.genres}"/>
+
+                    <TextView
+                        android:id="@+id/tvReleaseDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:paddingStart="@dimen/double_extra_large_padding"
+                        android:textColor="@color/titleTextColor"
+                        android:textSize="@dimen/double_extra_large_size"
+                        tools:ignore="RtlSymmetry"
+                        android:text="@{movieDetails.release_date}"/>
+                </LinearLayout>
+
                 <TextView
-                    android:id="@+id/tvRate"
+                    android:id="@+id/tvTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/titleTextColor"
-                    android:textSize="@dimen/double_extra_large_size"
-                    android:padding="@dimen/double_extra_small_padding"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingStart="@dimen/double_extra_large_padding"
-                tools:ignore="RtlSymmetry">
-
-                <TextView
-                    android:id="@+id/tvFirstCategory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/titleTextColor"
-                    android:padding="@dimen/small_padding"
-                    android:textColor="@color/back" />
-
-                <TextView
-                    android:id="@+id/tvSecondCategory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/small_margin"
-                    android:background="@color/titleTextColor"
-                    android:padding="@dimen/small_padding"
-                    android:textColor="@color/back"
-                    tools:ignore="RtlSymmetry" />
-
-                <TextView
-                    android:id="@+id/tvReleaseDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
                     android:paddingStart="@dimen/double_extra_large_padding"
                     android:textColor="@color/titleTextColor"
                     android:textSize="@dimen/double_extra_large_size"
-                    tools:ignore="RtlSymmetry" />
+                    tools:ignore="RtlSymmetry"
+                    android:text="@{movieDetails.title}"/>
+
+                <TextView
+                    android:id="@+id/tvOverview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/medium_margin"
+                    android:paddingStart="@dimen/double_extra_large_padding"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/double_extra_large_size"
+                    tools:ignore="RtlSymmetry"
+                    android:text="@{movieDetails.overview}"/>
             </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="@dimen/double_extra_large_padding"
-                android:textColor="@color/titleTextColor"
-                android:textSize="@dimen/double_extra_large_size"
-                tools:ignore="RtlSymmetry" />
-
-            <TextView
-                android:id="@+id/tvOverview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/medium_margin"
-                android:paddingStart="@dimen/double_extra_large_padding"
-                android:textColor="@color/white"
-                android:textSize="@dimen/double_extra_large_size"
-                tools:ignore="RtlSymmetry" />
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-</LinearLayout>
+    </LinearLayout>
+</layout>

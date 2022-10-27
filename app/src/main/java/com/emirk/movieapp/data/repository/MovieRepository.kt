@@ -13,5 +13,5 @@ interface MovieRepository {
     fun getTopRatedMovies(coroutineScope: CoroutineScope): Resource<Flow<PagingData<Movie>>>
     fun getUpComingMovies(coroutineScope: CoroutineScope): Resource<Flow<PagingData<Movie>>>
     fun getNowPlayingMovies(coroutineScope: CoroutineScope): Resource<Flow<PagingData<Movie>>>
-    suspend fun getMovieDetailById(id: Int): MovieDetails
+    suspend fun getMovieDetailById(id: Int): Resource<MovieDetails>
 }

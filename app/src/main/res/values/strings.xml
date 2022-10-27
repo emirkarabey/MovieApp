@@ -8,4 +8,7 @@
     <string name="tv_top_rated_text">Top Rated</string>
     <string name="tv_up_coming_text">Up Coming</string>
     <string name="tv_now_playing_text">Now Playing</string>
+    //details
+    <string name="iv_back_drop_content_description">Now Playing</string>
+    <string name="iv_poster_content_description">Now Playing</string>
 </resources>

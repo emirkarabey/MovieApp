@@ -16,9 +16,10 @@ class DetailsViewModel @Inject constructor(
 ): ViewModel() {
 
     var movieDetailLiveData: MutableLiveData<Resource<MovieDetails>> = MutableLiveData()
-
+    var progressBarLiveData: MutableLiveData<Boolean> = MutableLiveData()
     fun getMovieDetailById(id: Int){
         viewModelScope.launch {
+            progressBarLiveData.postValue(true)
             movieDetailLiveData.value = repository.getMovieDetailById(id)
         }
     }

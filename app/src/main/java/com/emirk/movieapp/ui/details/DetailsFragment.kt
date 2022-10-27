@@ -40,14 +40,25 @@ class DetailsFragment : Fragment() {
         viewModel.movieDetailLiveData.observe(viewLifecycleOwner){
             when(it.status){
                 Resource.Status.LOADING->{
-
+                    viewModel.progressBarLiveData.postValue(true)
                 }
                 Resource.Status.SUCCESS->{
                     binding.movieDetails = it.data
+                    viewModel.progressBarLiveData.postValue(false)
                 }
                 Resource.Status.ERROR->{
 
                 }
+            }
+        }
+
+        viewModel.progressBarLiveData.observe(viewLifecycleOwner){
+            if (it){
+                binding.nestedSv.visibility = View.GONE
+                binding.progressBar.visibility = View.VISIBLE
+            }else{
+                binding.nestedSv.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.GONE
             }
         }
     }

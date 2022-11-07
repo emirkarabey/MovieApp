@@ -8,12 +8,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.emirk.movieapp.data.remote.model.movie_lists.Movie
 import com.emirk.movieapp.databinding.FragmentHomeBinding
 import com.emirk.movieapp.ui.adapter.ItemClickListener
 import com.emirk.movieapp.ui.adapter.MoviesAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -22,11 +25,11 @@ class HomeFragment : Fragment(), ItemClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModels()
-    private var popularMoviesAdapter = MoviesAdapter(this)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private var popularMoviesAdapter = MoviesAdapter(this)
+    private var topRatedMoviesAdapter = MoviesAdapter(this)
+    private var upComingMoviesAdapter = MoviesAdapter(this)
+    private var nowPlayingMoviesAdapter = MoviesAdapter(this)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,44 +42,48 @@ class HomeFragment : Fragment(), ItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupAllRecycler()
-        collectData()
+        observeProgressBar()
+        collectLatestData()
+        viewModel.progressBarLiveData.postValue(false)
     }
 
-    private fun collectData() {
-        lifecycleScope.launch {
-            viewModel.popularMovies.data?.data?.collectLatest {
-                popularMoviesAdapter.submitData(it)
-            }
-            viewModel.latestMovies.data?.data?.collectLatest {
-                popularMoviesAdapter.submitData(it)
-            }
-
-            viewModel.topRatedMovies.data?.data?.collectLatest {
-                popularMoviesAdapter.submitData(it)
-            }
-            viewModel.upComingMovies.data?.data?.collectLatest {
-                popularMoviesAdapter.submitData(it)
-            }
-            viewModel.nowPlayingMovies.data?.data?.collectLatest {
-                popularMoviesAdapter.submitData(it)
+    private fun observeProgressBar() {
+        viewModel.progressBarLiveData.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.progressBar.visibility = View.VISIBLE
+            } else {
+                binding.progressBar.visibility = View.INVISIBLE
             }
         }
     }
 
     private fun setupAllRecycler() {
-        setupRecycler(binding.rvPopular)
-        setupRecycler(binding.rvLatest)
-        setupRecycler(binding.rvTopRated)
-        setupRecycler(binding.rvUpComing)
-        setupRecycler(binding.rvNowPlaying)
+        setupRecycler(binding.rvPopular, popularMoviesAdapter)
+        setupRecycler(binding.rvTopRated, topRatedMoviesAdapter)
+        setupRecycler(binding.rvUpComing, upComingMoviesAdapter)
+        setupRecycler(binding.rvNowPlaying, nowPlayingMoviesAdapter)
     }
 
-
-    private fun setupRecycler(recyclerView: RecyclerView) {
+    private fun setupRecycler(recyclerView: RecyclerView, moviesAdapter: MoviesAdapter) {
         recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        recyclerView.adapter = popularMoviesAdapter
+        recyclerView.adapter = moviesAdapter
 
+    }
+
+    private fun collectLatestData() = lifecycleScope.launch {
+        collectPagingData(viewModel.popularMovies, popularMoviesAdapter)
+        collectPagingData(viewModel.topRatedMovies, topRatedMoviesAdapter)
+        collectPagingData(viewModel.upComingMovies, upComingMoviesAdapter)
+        collectPagingData(viewModel.nowPlayingMovies, nowPlayingMoviesAdapter)
+    }
+
+    private fun collectPagingData(data: Flow<PagingData<Movie>>, moviesAdapter: MoviesAdapter) {
+        lifecycleScope.launch {
+            data.collectLatest { data ->
+                moviesAdapter.submitData(data)
+            }
+        }
     }
 
     override fun onDestroyView() {

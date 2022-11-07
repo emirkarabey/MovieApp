@@ -7,16 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.emirk.movieapp.R
 import com.emirk.movieapp.databinding.FragmentDetailsBinding
-import com.emirk.movieapp.utils.Resource
+import com.emirk.movieapp.utils.DataState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DetailsFragment : Fragment() {
 
-    lateinit var binding: FragmentDetailsBinding
+    private lateinit var binding: FragmentDetailsBinding
     private val viewModel: DetailsViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,46 +28,34 @@ class DetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        getMovieDetailsById()
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_details,container,false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_details, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observe()
-    }
-
-    private fun observe(){
-        viewModel.movieDetailLiveData.observe(viewLifecycleOwner){
-            when(it.status){
-                Resource.Status.LOADING->{
-                    viewModel.progressBarLiveData.postValue(true)
-                }
-                Resource.Status.SUCCESS->{
-                    binding.movieDetails = it.data
-                    viewModel.progressBarLiveData.postValue(false)
-                }
-                Resource.Status.ERROR->{
-
-                }
-            }
-        }
-
-        viewModel.progressBarLiveData.observe(viewLifecycleOwner){
-            if (it){
-                binding.nestedSv.visibility = View.GONE
-                binding.progressBar.visibility = View.VISIBLE
-            }else{
-                binding.nestedSv.visibility = View.VISIBLE
-                binding.progressBar.visibility = View.GONE
-            }
-        }
-    }
-
-    private fun getMovieDetailsById(){
         val args: DetailsFragmentArgs by navArgs()
-        viewModel.getMovieDetailById(args.id)
+        getDetail(args.id)
     }
 
+    private fun getDetail(id: Int) {
+        viewModel.getMovies(id)
+        lifecycleScope.launch {
+            viewModel.movies.collect {
+                when (it) {
+                    is DataState.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is DataState.Success -> {
+                        binding.progressBar.visibility = View.INVISIBLE
+                        binding.movieDetails = it.data
+                    }
+                    is DataState.Failure -> {
+                        binding.progressBar.visibility = View.INVISIBLE
+                    }
+                    is DataState.Empty -> {}
+                }
+            }
+        }
+    }
 }

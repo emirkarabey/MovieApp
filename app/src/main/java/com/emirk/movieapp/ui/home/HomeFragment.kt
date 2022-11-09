@@ -11,10 +11,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.emirk.movieapp.data.local.entity.MovieEntity
 import com.emirk.movieapp.databinding.FragmentHomeBinding
+import com.emirk.movieapp.domain.mapper.MovieEntityMapper
 import com.emirk.movieapp.ui.adapter.ItemClickListener
 import com.emirk.movieapp.ui.adapter.MoviesAdapter
+import com.emirk.movieapp.ui.adapter.WatchLaterHomeAdapter
 import com.emirk.movieapp.ui.model.MovieUiModel
+import com.emirk.movieapp.utils.DataState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -26,6 +30,7 @@ class HomeFragment : Fragment(), ItemClickListener {
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModels()
 
+    private var watchLaterAdapter = WatchLaterHomeAdapter()
     private var popularMoviesAdapter = MoviesAdapter(this)
     private var topRatedMoviesAdapter = MoviesAdapter(this)
     private var upComingMoviesAdapter = MoviesAdapter(this)
@@ -42,8 +47,10 @@ class HomeFragment : Fragment(), ItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupAllRecycler()
+        setupWatchLaterRecycler()
         observeProgressBar()
         collectLatestData()
+        getWatchLaterMovie()
     }
 
     private fun observeProgressBar() {
@@ -61,6 +68,12 @@ class HomeFragment : Fragment(), ItemClickListener {
         setupRecycler(binding.rvTopRated, topRatedMoviesAdapter)
         setupRecycler(binding.rvUpComing, upComingMoviesAdapter)
         setupRecycler(binding.rvNowPlaying, nowPlayingMoviesAdapter)
+    }
+
+    private fun setupWatchLaterRecycler() {
+        binding.rvWatchLater.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvWatchLater.adapter = watchLaterAdapter
     }
 
     private fun setupRecycler(recyclerView: RecyclerView, moviesAdapter: MoviesAdapter) {
@@ -96,6 +109,29 @@ class HomeFragment : Fragment(), ItemClickListener {
     private fun addWatchLaterMovie(movieUi: MovieUiModel) {
         lifecycleScope.launch {
             viewModel.addWatchLaterMovie(movieUi)
+        }
+    }
+
+    private fun getWatchLaterMovie() {
+        viewModel.getWatchLaterMovie()
+        lifecycleScope.launch {
+            viewModel.movies.collect {
+                when (it) {
+                    is DataState.Loading -> {
+                        //pb visibility
+                    }
+                    is DataState.Success -> {
+                        //pb visibility
+                        val movieUiModel =
+                            MovieEntityMapper().fromEntityList(it.data as List<MovieEntity>)
+                        watchLaterAdapter.movies = movieUiModel
+                    }
+                    is DataState.Failure -> {
+                        //pb visibility
+                    }
+                    is DataState.Empty -> {}
+                }
+            }
         }
     }
 

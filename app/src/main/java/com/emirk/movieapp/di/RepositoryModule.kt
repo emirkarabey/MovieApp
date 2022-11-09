@@ -1,5 +1,6 @@
 package com.emirk.movieapp.di
 
+import com.emirk.movieapp.data.local.WatchLaterDao
 import com.emirk.movieapp.data.remote.ApiService
 import com.emirk.movieapp.data.repository.MovieRepositoryImpl
 import com.emirk.movieapp.domain.repository.MovieRepository
@@ -15,5 +16,6 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideNewsRepository(api: ApiService): MovieRepository = MovieRepositoryImpl(api)
+    fun provideNewsRepository(api: ApiService, watchLaterDao: WatchLaterDao):
+            MovieRepository = MovieRepositoryImpl(api, watchLaterDao)
 }

@@ -72,7 +72,7 @@ class MovieRepositoryImpl @Inject constructor(
         watchLaterDao.addWatchLaterMovie(movieEntity)
 
     override fun getWatchLaterMovie(): List<MovieEntity> {
-        return watchLaterDao.getAllFavoriteMovie()
+        return watchLaterDao.getAllWatchLaterMovie()
     }
 
     companion object {

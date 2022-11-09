@@ -12,9 +12,19 @@ class MoviesViewHolder(
     private val binding: ItemMovieBinding,
 ) :
     RecyclerView.ViewHolder(binding.root) {
-    fun bind(movie: MovieUiModel, itemView: View, listener: ItemClickListener) = binding.apply {
+    fun bind(
+        movie: MovieUiModel,
+        itemView: View,
+        listener: ItemClickListener,
+        watchLaterMoviesId: List<Int>
+    ) = binding.apply {
         tvTitle.text = movie.title
         tvReleaseDate.text = movie.release_date
+        watchLaterMoviesId.forEach {
+            if (it == movie.id) {
+                movie.isFav = true
+            }
+        }
         Glide.with(ivMovie).load(ApiConstants.getPosterPath(movie.poster_path)).into(ivMovie)
 
         if (movie.isFav == true) {

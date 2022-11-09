@@ -30,6 +30,8 @@ class HomeFragment : Fragment(), ItemClickListener {
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModels()
 
+    private val watchLaterMoviesId = mutableListOf<Int>()
+
     private var watchLaterAdapter = WatchLaterHomeAdapter()
     private var popularMoviesAdapter = MoviesAdapter(this)
     private var topRatedMoviesAdapter = MoviesAdapter(this)
@@ -84,18 +86,20 @@ class HomeFragment : Fragment(), ItemClickListener {
     }
 
     private fun collectLatestData() = lifecycleScope.launch {
-        collectPagingData(viewModel.popularMovies, popularMoviesAdapter)
-        collectPagingData(viewModel.topRatedMovies, topRatedMoviesAdapter)
-        collectPagingData(viewModel.upComingMovies, upComingMoviesAdapter)
-        collectPagingData(viewModel.nowPlayingMovies, nowPlayingMoviesAdapter)
+        collectPagingData(viewModel.popularMovies, popularMoviesAdapter, watchLaterMoviesId)
+        collectPagingData(viewModel.topRatedMovies, topRatedMoviesAdapter, watchLaterMoviesId)
+        collectPagingData(viewModel.upComingMovies, upComingMoviesAdapter, watchLaterMoviesId)
+        collectPagingData(viewModel.nowPlayingMovies, nowPlayingMoviesAdapter, watchLaterMoviesId)
     }
 
     private fun collectPagingData(
         data: Flow<PagingData<MovieUiModel>>,
-        moviesAdapter: MoviesAdapter
+        moviesAdapter: MoviesAdapter,
+        watchLaterMoviesId: List<Int>
     ) {
         lifecycleScope.launch {
             data.collectLatest { data ->
+                moviesAdapter.watchLaterMoviesId = watchLaterMoviesId
                 moviesAdapter.submitData(data)
             }
         }
@@ -118,16 +122,27 @@ class HomeFragment : Fragment(), ItemClickListener {
             viewModel.movies.collect {
                 when (it) {
                     is DataState.Loading -> {
-                        //pb visibility
+                        binding.progressBar.visibility = View.VISIBLE
                     }
                     is DataState.Success -> {
                         //pb visibility
                         val movieUiModel =
                             MovieEntityMapper().fromEntityList(it.data as List<MovieEntity>)
                         watchLaterAdapter.movies = movieUiModel
+                        watchLaterAdapter.notifyDataSetChanged()
+
+                        movieUiModel.forEach { movieUiModelFor ->
+                            movieUiModelFor.id?.let { it1 -> watchLaterMoviesId.add(it1) }
+                        }
+
+                        if (movieUiModel.isEmpty()) {
+                            binding.llWatchLater.visibility = View.GONE
+                        }
+
+                        binding.progressBar.visibility = View.INVISIBLE
                     }
                     is DataState.Failure -> {
-                        //pb visibility
+                        binding.progressBar.visibility = View.INVISIBLE
                     }
                     is DataState.Empty -> {}
                 }
@@ -137,6 +152,7 @@ class HomeFragment : Fragment(), ItemClickListener {
 
     override fun onClickWatchLaterButton(movieUi: MovieUiModel) {
         addWatchLaterMovie(movieUi)
+        getWatchLaterMovie()
     }
 
     override fun onDestroyView() {

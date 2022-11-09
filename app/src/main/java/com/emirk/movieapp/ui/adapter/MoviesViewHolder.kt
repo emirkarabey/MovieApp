@@ -22,6 +22,7 @@ class MoviesViewHolder(
         tvReleaseDate.text = movie.release_date
         watchLaterMoviesId.forEach {
             if (it == movie.id) {
+                println(movie.title)
                 movie.isFav = true
             }
         }
@@ -29,6 +30,8 @@ class MoviesViewHolder(
 
         if (movie.isFav == true) {
             binding.favButton.setBackgroundResource(R.drawable.ic_baseline_bookmark_added_24)
+        }else{
+            binding.favButton.setBackgroundResource(R.drawable.ic_baseline_bookmark_add_24)
         }
 
         itemView.setOnClickListener {

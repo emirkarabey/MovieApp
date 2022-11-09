@@ -1,6 +1,5 @@
 package com.emirk.movieapp.ui.home
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emirk.movieapp.data.local.entity.MovieEntity
@@ -24,16 +23,11 @@ class HomeViewModel @Inject constructor(
     val repository: MovieRepositoryImpl,
     private val getWatchLaterMovieUseCase: GetWatchLaterMovieUseCase
 ) : ViewModel() {
-    val progressBarLiveData: MutableLiveData<Boolean> = MutableLiveData()
 
     private val _movies: MutableStateFlow<DataState<List<MovieEntity?>>> =
         MutableStateFlow(DataState.Empty)
     val movies: StateFlow<DataState<List<MovieEntity?>>>
         get() = _movies
-
-    init {
-        progressBarLiveData.postValue(false)
-    }
 
     val popularMovies = repository.getPopularMovies(viewModelScope)
     val topRatedMovies = repository.getTopRatedMovies(viewModelScope)

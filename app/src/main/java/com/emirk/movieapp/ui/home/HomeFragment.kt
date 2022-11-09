@@ -43,6 +43,7 @@ class HomeFragment : Fragment(), ItemClickListener {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding.progressBar.visibility = View.INVISIBLE
         return binding.root
     }
 
@@ -50,19 +51,8 @@ class HomeFragment : Fragment(), ItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         setupAllRecycler()
         setupWatchLaterRecycler()
-        observeProgressBar()
         collectLatestData()
         getWatchLaterMovie()
-    }
-
-    private fun observeProgressBar() {
-        viewModel.progressBarLiveData.observe(viewLifecycleOwner) {
-            if (it) {
-                binding.progressBar.visibility = View.VISIBLE
-            } else {
-                binding.progressBar.visibility = View.INVISIBLE
-            }
-        }
     }
 
     private fun setupAllRecycler() {
@@ -122,10 +112,9 @@ class HomeFragment : Fragment(), ItemClickListener {
             viewModel.movies.collect {
                 when (it) {
                     is DataState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
+                        //binding.progressBar.visibility = View.VISIBLE
                     }
                     is DataState.Success -> {
-                        //pb visibility
                         val movieUiModel =
                             MovieEntityMapper().fromEntityList(it.data as List<MovieEntity>)
                         watchLaterAdapter.movies = movieUiModel
@@ -137,9 +126,9 @@ class HomeFragment : Fragment(), ItemClickListener {
 
                         if (movieUiModel.isEmpty()) {
                             binding.llWatchLater.visibility = View.GONE
+                        }else{
+                            binding.llWatchLater.visibility = View.VISIBLE
                         }
-
-                        binding.progressBar.visibility = View.INVISIBLE
                     }
                     is DataState.Failure -> {
                         binding.progressBar.visibility = View.INVISIBLE
@@ -152,6 +141,7 @@ class HomeFragment : Fragment(), ItemClickListener {
 
     override fun onClickWatchLaterButton(movieUi: MovieUiModel) {
         addWatchLaterMovie(movieUi)
+        setupWatchLaterRecycler()
         getWatchLaterMovie()
     }
 

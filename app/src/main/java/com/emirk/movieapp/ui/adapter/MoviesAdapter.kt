@@ -4,16 +4,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import com.emirk.movieapp.data.remote.model.movie_lists.Movie
 import com.emirk.movieapp.databinding.ItemMovieBinding
+import com.emirk.movieapp.ui.model.MovieUiModel
 
-class MoviesAdapter(private val listener: ItemClickListener) : PagingDataAdapter<Movie, MoviesViewHolder>(DiffCallback) {
+class MoviesAdapter(private val listener: ItemClickListener) : PagingDataAdapter<MovieUiModel, MoviesViewHolder>(DiffCallback) {
 
-    object DiffCallback: DiffUtil.ItemCallback<Movie>(){
-        override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+    object DiffCallback: DiffUtil.ItemCallback<MovieUiModel>(){
+        override fun areItemsTheSame(oldItem: MovieUiModel, newItem: MovieUiModel): Boolean {
             return oldItem.title == newItem.title
         }
-        override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+        override fun areContentsTheSame(oldItem: MovieUiModel, newItem: MovieUiModel): Boolean {
             return oldItem == newItem
         }
     }

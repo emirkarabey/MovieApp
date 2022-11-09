@@ -11,10 +11,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.emirk.movieapp.data.remote.model.movie_lists.Movie
 import com.emirk.movieapp.databinding.FragmentHomeBinding
 import com.emirk.movieapp.ui.adapter.ItemClickListener
 import com.emirk.movieapp.ui.adapter.MoviesAdapter
+import com.emirk.movieapp.ui.model.MovieUiModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -44,7 +44,6 @@ class HomeFragment : Fragment(), ItemClickListener {
         setupAllRecycler()
         observeProgressBar()
         collectLatestData()
-        viewModel.progressBarLiveData.postValue(false)
     }
 
     private fun observeProgressBar() {
@@ -78,7 +77,10 @@ class HomeFragment : Fragment(), ItemClickListener {
         collectPagingData(viewModel.nowPlayingMovies, nowPlayingMoviesAdapter)
     }
 
-    private fun collectPagingData(data: Flow<PagingData<Movie>>, moviesAdapter: MoviesAdapter) {
+    private fun collectPagingData(
+        data: Flow<PagingData<MovieUiModel>>,
+        moviesAdapter: MoviesAdapter
+    ) {
         lifecycleScope.launch {
             data.collectLatest { data ->
                 moviesAdapter.submitData(data)
@@ -86,13 +88,23 @@ class HomeFragment : Fragment(), ItemClickListener {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     override fun onClickMovie(id: Int) {
         val action = HomeFragmentDirections.actionNavigationHomeToNavigationDetails(id)
         findNavController().navigate(action)
+    }
+
+    private fun addWatchLaterMovie(movieUi: MovieUiModel) {
+        lifecycleScope.launch {
+            viewModel.addWatchLaterMovie(movieUi)
+        }
+    }
+
+    override fun onClickWatchLaterButton(movieUi: MovieUiModel) {
+        addWatchLaterMovie(movieUi)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

@@ -2,13 +2,17 @@
     <string name="app_name">MovieApp</string>
     <string name="title_home">Home</string>
     <string name="title_details">Details</string>
-    <string name="title_favorite">Favorite Movies</string>
+    <string name="title_watch_later">Watch Later</string>
     <string name="tv_popular_text">Popular</string>
-    <string name="tv_latest_text">Latest</string>
+    <string name="tv_watch_later_text">Watch Later</string>
     <string name="tv_top_rated_text">Top Rated</string>
     <string name="tv_up_coming_text">Up Coming</string>
     <string name="tv_now_playing_text">Now Playing</string>
+    <string name="home_imageButton_contentDescription">Favorite Button</string>
+    <string name="home_iv_movie_contentDescription">Movie photo</string>
     //details
     <string name="iv_back_drop_content_description">Now Playing</string>
     <string name="iv_poster_content_description">Now Playing</string>
+    //watch later
+    <string name="iv_watch_later_movie_content_description">watch later</string>
 </resources>

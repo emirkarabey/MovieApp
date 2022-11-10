@@ -10,7 +10,7 @@ interface WatchLaterDao {
     @Insert
     suspend fun addWatchLaterMovie(movie: MovieEntity)
 
-    @Query("DELETE FROM favorite_movie WHERE uid=:movieId")
+    @Query("DELETE FROM favorite_movie WHERE id=:movieId")
     suspend fun deleteMovie(movieId: Int)
 
     @Query("SELECT * FROM favorite_movie")

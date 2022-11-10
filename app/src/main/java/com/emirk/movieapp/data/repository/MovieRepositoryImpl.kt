@@ -75,6 +75,8 @@ class MovieRepositoryImpl @Inject constructor(
         return watchLaterDao.getAllWatchLaterMovie()
     }
 
+    override suspend fun deleteWatchLaterMovie(movieId: Int) = watchLaterDao.deleteMovie(movieId)
+
     companion object {
         const val NETWORK_PAGE_SIZE = 10
     }

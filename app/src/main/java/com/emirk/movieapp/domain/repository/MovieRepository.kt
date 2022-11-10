@@ -17,4 +17,5 @@ interface MovieRepository {
 
     suspend fun addWatchLaterMovie(movieEntity: MovieEntity)
     fun getWatchLaterMovie(): List<MovieEntity>
+    suspend fun deleteWatchLaterMovie(movieId: Int)
 }

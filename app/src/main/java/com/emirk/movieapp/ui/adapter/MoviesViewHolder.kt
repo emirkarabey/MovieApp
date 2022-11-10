@@ -16,13 +16,13 @@ class MoviesViewHolder(
         movie: MovieUiModel,
         itemView: View,
         listener: ItemClickListener,
-        watchLaterMoviesId: List<Int>
+        watchLaterMoviesId: List<Int>,
+        position: Int
     ) = binding.apply {
         tvTitle.text = movie.title
         tvReleaseDate.text = movie.release_date
         watchLaterMoviesId.forEach {
             if (it == movie.id) {
-                println(movie.title)
                 movie.isFav = true
             }
         }
@@ -39,9 +39,9 @@ class MoviesViewHolder(
         }
 
         binding.favButton.setOnClickListener {
-            movie.isFav = true
-            bindingAdapter?.notifyDataSetChanged()
-            listener.onClickWatchLaterButton(movie)
+            bindingAdapter?.notifyItemChanged(position)
+            listener.onClickWatchLaterButton(movie,position)
+            bindingAdapter?.notifyItemChanged(position)
         }
     }
 }

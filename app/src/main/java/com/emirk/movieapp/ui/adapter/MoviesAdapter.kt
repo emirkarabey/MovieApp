@@ -23,7 +23,7 @@ class MoviesAdapter(private val listener: ItemClickListener) :
     var watchLaterMoviesId: List<Int> = mutableListOf()
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
-        holder.bind(getItem(position)!!, holder.itemView, listener, watchLaterMoviesId)
+        holder.bind(getItem(position)!!, holder.itemView, listener, watchLaterMoviesId,position)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {

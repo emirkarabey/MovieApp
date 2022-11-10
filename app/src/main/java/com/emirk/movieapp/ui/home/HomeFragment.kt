@@ -126,7 +126,7 @@ class HomeFragment : Fragment(), ItemClickListener {
 
                         if (movieUiModel.isEmpty()) {
                             binding.llWatchLater.visibility = View.GONE
-                        }else{
+                        } else {
                             binding.llWatchLater.visibility = View.VISIBLE
                         }
                     }
@@ -139,10 +139,23 @@ class HomeFragment : Fragment(), ItemClickListener {
         }
     }
 
-    override fun onClickWatchLaterButton(movieUi: MovieUiModel) {
-        addWatchLaterMovie(movieUi)
-        setupWatchLaterRecycler()
-        getWatchLaterMovie()
+    override fun onClickWatchLaterButton(movieUi: MovieUiModel, position: Int) {
+        if (movieUi.isFav == true) {
+            movieUi.isFav = false
+            popularMoviesAdapter.notifyItemChanged(position)
+            movieUi.id?.let { deleteWatchLaterMovie(it) }
+            watchLaterAdapter.notifyItemRemoved(position)
+        } else {
+            addWatchLaterMovie(movieUi)
+            getWatchLaterMovie()
+            watchLaterAdapter.notifyDataSetChanged()
+            movieUi.isFav = true
+            popularMoviesAdapter.notifyItemChanged(position)
+        }
+    }
+
+    private fun deleteWatchLaterMovie(movieId: Int) {
+        viewModel.deleteWatchLaterMovie(movieId)
     }
 
     override fun onDestroyView() {

@@ -57,4 +57,11 @@ class HomeViewModel @Inject constructor(
                 }.launchIn(this)
         }
     }
+
+    fun deleteWatchLaterMovie(movieId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteWatchLaterMovie(movieId)
+            getWatchLaterMovie()
+        }
+    }
 }

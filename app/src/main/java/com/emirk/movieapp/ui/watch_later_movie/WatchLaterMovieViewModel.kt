@@ -3,6 +3,7 @@ package com.emirk.movieapp.ui.watch_later_movie
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emirk.movieapp.data.local.entity.MovieEntity
+import com.emirk.movieapp.data.repository.MovieRepositoryImpl
 import com.emirk.movieapp.domain.use_case.GetWatchLaterMovieUseCase
 import com.emirk.movieapp.utils.DataState
 import com.emirk.movieapp.utils.Resource
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WatchLaterMovieViewModel @Inject constructor(
-    private val getWatchLaterMovieUseCase: GetWatchLaterMovieUseCase
+    private val getWatchLaterMovieUseCase: GetWatchLaterMovieUseCase,
+    private val repository: MovieRepositoryImpl
 ) : ViewModel() {
 
     private val _movies: MutableStateFlow<DataState<List<MovieEntity?>>> =
@@ -41,6 +43,13 @@ class WatchLaterMovieViewModel @Inject constructor(
                         }
                     }
                 }.launchIn(this)
+        }
+    }
+
+    fun deleteWatchLaterMovie(movieId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteWatchLaterMovie(movieId)
+            getWatchLaterMovie()
         }
     }
 }

@@ -12,18 +12,20 @@ import com.emirk.movieapp.data.local.entity.MovieEntity
 import com.emirk.movieapp.databinding.FragmentWatchLaterMovieBinding
 import com.emirk.movieapp.domain.mapper.MovieEntityMapper
 import com.emirk.movieapp.ui.adapter.WatchLaterAdapter
+import com.emirk.movieapp.ui.adapter.WatchLaterClickListener
+import com.emirk.movieapp.ui.model.MovieUiModel
 import com.emirk.movieapp.utils.DataState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class WatchLaterMovieFragment : Fragment() {
+class WatchLaterMovieFragment : Fragment(), WatchLaterClickListener {
 
     private var _binding: FragmentWatchLaterMovieBinding? = null
     private val binding get() = _binding!!
     private val viewModel: WatchLaterMovieViewModel by viewModels()
 
-    private val watchLaterAdapter = WatchLaterAdapter()
+    private val watchLaterAdapter = WatchLaterAdapter(this)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,16 +47,17 @@ class WatchLaterMovieFragment : Fragment() {
             viewModel.movies.collect {
                 when (it) {
                     is DataState.Loading -> {
-                        //pb visibility
+                        binding.progressBar.visibility = View.VISIBLE
                     }
                     is DataState.Success -> {
-                        //pb visibility
                         val movieUiModel =
                             MovieEntityMapper().fromEntityList(it.data as List<MovieEntity>)
                         watchLaterAdapter.movies = movieUiModel
+
+                        binding.progressBar.visibility = View.INVISIBLE
                     }
                     is DataState.Failure -> {
-                        //pb visibility
+                        binding.progressBar.visibility = View.INVISIBLE
                     }
                     is DataState.Empty -> {}
                 }
@@ -66,5 +69,13 @@ class WatchLaterMovieFragment : Fragment() {
         binding.rvFavMovie.layoutManager =
             GridLayoutManager(requireContext(), 2)
         binding.rvFavMovie.adapter = watchLaterAdapter
+    }
+
+    private fun deleteWatchLaterMovie(movieId: Int) {
+        viewModel.deleteWatchLaterMovie(movieId)
+    }
+
+    override fun onClickWatchLaterButton(movieUi: MovieUiModel, position: Int) {
+        movieUi.id?.let { deleteWatchLaterMovie(it) }
     }
 }

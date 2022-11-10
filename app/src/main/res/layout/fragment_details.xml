@@ -117,16 +117,6 @@
                             android:textColor="@color/back"
                             tools:ignore="RtlSymmetry" />
 
-                        <TextView
-                            android:id="@+id/tvReleaseDate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:paddingStart="@dimen/double_extra_large_padding"
-                            android:text="@{movieDetails.release_date}"
-                            android:textColor="@color/titleTextColor"
-                            android:textSize="@dimen/double_extra_large_size"
-                            tools:ignore="RtlSymmetry" />
                     </LinearLayout>
 
                     <TextView

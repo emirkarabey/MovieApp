@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.emirk.movieapp.databinding.ItemWatchLaterMovieBinding
 import com.emirk.movieapp.ui.model.MovieUiModel
 
-class WatchLaterAdapter() : RecyclerView.Adapter<WatchLaterVewHolder>() {
+class WatchLaterAdapter(private val listener: WatchLaterClickListener) :
+    RecyclerView.Adapter<WatchLaterViewHolder>() {
 
     object DiffCallback : DiffUtil.ItemCallback<MovieUiModel>() {
         override fun areItemsTheSame(oldItem: MovieUiModel, newItem: MovieUiModel): Boolean {
@@ -26,14 +27,14 @@ class WatchLaterAdapter() : RecyclerView.Adapter<WatchLaterVewHolder>() {
         get() = diffList.currentList
         set(value) = diffList.submitList(value)
 
-    override fun onBindViewHolder(holder: WatchLaterVewHolder, position: Int) {
-        movies[position]?.let { holder.bind(it) }
+    override fun onBindViewHolder(holder: WatchLaterViewHolder, position: Int) {
+        movies[position]?.let { holder.bind(it, listener, position) }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WatchLaterVewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WatchLaterViewHolder {
         val binding =
             ItemWatchLaterMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return WatchLaterVewHolder(binding)
+        return WatchLaterViewHolder(binding)
     }
 
     override fun getItemCount(): Int {

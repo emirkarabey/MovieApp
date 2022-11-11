@@ -28,15 +28,6 @@ class MovieRepositoryImpl @Inject constructor(
         ).flow.cachedIn(coroutineScope)
     }
 
-    override fun getLatestMovies(coroutineScope: CoroutineScope): Flow<PagingData<MovieUiModel>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = NETWORK_PAGE_SIZE
-            ),
-            pagingSourceFactory = { LatestMoviesPagingSource(apiService) }
-        ).flow.cachedIn(coroutineScope)
-    }
-
     override fun getTopRatedMovies(coroutineScope: CoroutineScope): Flow<PagingData<MovieUiModel>> {
         return Pager(
             config = PagingConfig(
@@ -52,15 +43,6 @@ class MovieRepositoryImpl @Inject constructor(
                 pageSize = NETWORK_PAGE_SIZE
             ),
             pagingSourceFactory = { UpComingPagingSource(apiService) }
-        ).flow.cachedIn(coroutineScope)
-    }
-
-    override fun getNowPlayingMovies(coroutineScope: CoroutineScope): Flow<PagingData<MovieUiModel>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = NETWORK_PAGE_SIZE
-            ),
-            pagingSourceFactory = { NowPlayingPagingSource(apiService) }
         ).flow.cachedIn(coroutineScope)
     }
 

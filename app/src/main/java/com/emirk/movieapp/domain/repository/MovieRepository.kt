@@ -9,10 +9,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
     fun getPopularMovies(coroutineScope: CoroutineScope): Flow<PagingData<MovieUiModel>>
-    fun getLatestMovies(coroutineScope: CoroutineScope): Flow<PagingData<MovieUiModel>>
     fun getTopRatedMovies(coroutineScope: CoroutineScope): Flow<PagingData<MovieUiModel>>
     fun getUpComingMovies(coroutineScope: CoroutineScope): Flow<PagingData<MovieUiModel>>
-    fun getNowPlayingMovies(coroutineScope: CoroutineScope): Flow<PagingData<MovieUiModel>>
     suspend fun getMovieDetailById(id: Int): MovieDetails
 
     suspend fun addWatchLaterMovie(movieEntity: MovieEntity)

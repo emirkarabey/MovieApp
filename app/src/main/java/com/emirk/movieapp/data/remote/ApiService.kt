@@ -14,13 +14,6 @@ interface ApiService {
         @Query("api_key") api_key: String = ApiConstants.API_KEY
     ): MovieResponse
 
-    @GET(ApiConstants.Endpoints.LATEST)
-    suspend fun getLatestMovies(
-        @Query("page") page: Int,
-        @Query("api_key") api_key: String = ApiConstants.API_KEY
-    ): MovieResponse
-
-
     @GET(ApiConstants.Endpoints.TOP_RATED)
     suspend fun getTopRatedMovies(
         @Query("page") page: Int,
@@ -29,12 +22,6 @@ interface ApiService {
 
     @GET(ApiConstants.Endpoints.UPCOMING)
     suspend fun getUpcomingMovies(
-        @Query("page") page: Int,
-        @Query("api_key") api_key: String = ApiConstants.API_KEY
-    ): MovieResponse
-
-    @GET(ApiConstants.Endpoints.NOW_PLAYING)
-    suspend fun getNowPlayingMovies(
         @Query("page") page: Int,
         @Query("api_key") api_key: String = ApiConstants.API_KEY
     ): MovieResponse

@@ -1,4 +1,4 @@
-<h1 align="center">StoreApp</h1>
+<h1 align="center">Movie App</h1>
 
 <p align="center">  
 This is an android application where movies in different categories from the internet are shot, listed and added to the watch section later.

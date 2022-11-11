@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.emirk.movieapp.data.local.entity.MovieEntity
@@ -20,7 +19,6 @@ import com.emirk.movieapp.ui.adapter.WatchLaterHomeAdapter
 import com.emirk.movieapp.ui.model.MovieUiModel
 import com.emirk.movieapp.utils.DataState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -36,14 +34,12 @@ class HomeFragment : Fragment(), ItemClickListener {
     private var popularMoviesAdapter = MoviesAdapter(this)
     private var topRatedMoviesAdapter = MoviesAdapter(this)
     private var upComingMoviesAdapter = MoviesAdapter(this)
-    private var nowPlayingMoviesAdapter = MoviesAdapter(this)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        binding.progressBar.visibility = View.INVISIBLE
         return binding.root
     }
 
@@ -51,15 +47,20 @@ class HomeFragment : Fragment(), ItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         setupAllRecycler()
         setupWatchLaterRecycler()
-        collectLatestData()
         getWatchLaterMovie()
+        getCollectData()
+    }
+
+    private fun getCollectData() {
+        collectPopularPagingData()
+        collectTopRatedPagingData()
+        collectUpComingPagingData()
     }
 
     private fun setupAllRecycler() {
         setupRecycler(binding.rvPopular, popularMoviesAdapter)
         setupRecycler(binding.rvTopRated, topRatedMoviesAdapter)
         setupRecycler(binding.rvUpComing, upComingMoviesAdapter)
-        setupRecycler(binding.rvNowPlaying, nowPlayingMoviesAdapter)
     }
 
     private fun setupWatchLaterRecycler() {
@@ -75,22 +76,35 @@ class HomeFragment : Fragment(), ItemClickListener {
 
     }
 
-    private fun collectLatestData() = lifecycleScope.launch {
-        collectPagingData(viewModel.popularMovies, popularMoviesAdapter, watchLaterMoviesId)
-        collectPagingData(viewModel.topRatedMovies, topRatedMoviesAdapter, watchLaterMoviesId)
-        collectPagingData(viewModel.upComingMovies, upComingMoviesAdapter, watchLaterMoviesId)
-        collectPagingData(viewModel.nowPlayingMovies, nowPlayingMoviesAdapter, watchLaterMoviesId)
+    private fun collectPopularPagingData() {
+        viewModel.getPopularMovies()
+        lifecycleScope.launch {
+            viewModel.getPopularMovies.collect {
+                it.collectLatest { pagingData ->
+                    popularMoviesAdapter.submitData(pagingData)
+                }
+            }
+        }
     }
 
-    private fun collectPagingData(
-        data: Flow<PagingData<MovieUiModel>>,
-        moviesAdapter: MoviesAdapter,
-        watchLaterMoviesId: List<Int>
-    ) {
+    private fun collectTopRatedPagingData() {
+        viewModel.getTopRatedMovies()
         lifecycleScope.launch {
-            data.collectLatest { data ->
-                moviesAdapter.watchLaterMoviesId = watchLaterMoviesId
-                moviesAdapter.submitData(data)
+            viewModel.getTopRatedMovies.collect {
+                it.collectLatest { pagingData ->
+                    topRatedMoviesAdapter.submitData(pagingData)
+                }
+            }
+        }
+    }
+
+    private fun collectUpComingPagingData() {
+        viewModel.getUpComingMovies()
+        lifecycleScope.launch {
+            viewModel.getUpComingMovies.collect {
+                it.collectLatest { pagingData ->
+                    upComingMoviesAdapter.submitData(pagingData)
+                }
             }
         }
     }
@@ -111,18 +125,19 @@ class HomeFragment : Fragment(), ItemClickListener {
         lifecycleScope.launch {
             viewModel.movies.collect {
                 when (it) {
-                    is DataState.Loading -> {
-                        //binding.progressBar.visibility = View.VISIBLE
-                    }
+                    is DataState.Loading -> {}
                     is DataState.Success -> {
                         val movieUiModel =
                             MovieEntityMapper().fromEntityList(it.data as List<MovieEntity>)
                         watchLaterAdapter.movies = movieUiModel
-                        watchLaterAdapter.notifyDataSetChanged()
 
+                        watchLaterMoviesId.clear()
                         movieUiModel.forEach { movieUiModelFor ->
                             movieUiModelFor.id?.let { it1 -> watchLaterMoviesId.add(it1) }
                         }
+                        popularMoviesAdapter.watchLaterMoviesId = watchLaterMoviesId
+                        topRatedMoviesAdapter.watchLaterMoviesId = watchLaterMoviesId
+                        upComingMoviesAdapter.watchLaterMoviesId = watchLaterMoviesId
 
                         if (movieUiModel.isEmpty()) {
                             binding.llWatchLater.visibility = View.GONE
@@ -130,9 +145,7 @@ class HomeFragment : Fragment(), ItemClickListener {
                             binding.llWatchLater.visibility = View.VISIBLE
                         }
                     }
-                    is DataState.Failure -> {
-                        binding.progressBar.visibility = View.INVISIBLE
-                    }
+                    is DataState.Failure -> {}
                     is DataState.Empty -> {}
                 }
             }
@@ -142,15 +155,11 @@ class HomeFragment : Fragment(), ItemClickListener {
     override fun onClickWatchLaterButton(movieUi: MovieUiModel, position: Int) {
         if (movieUi.isFav == true) {
             movieUi.isFav = false
-            popularMoviesAdapter.notifyItemChanged(position)
             movieUi.id?.let { deleteWatchLaterMovie(it) }
-            watchLaterAdapter.notifyItemRemoved(position)
         } else {
             addWatchLaterMovie(movieUi)
             getWatchLaterMovie()
-            watchLaterAdapter.notifyDataSetChanged()
             movieUi.isFav = true
-            popularMoviesAdapter.notifyItemChanged(position)
         }
     }
 

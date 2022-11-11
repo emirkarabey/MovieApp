@@ -2,6 +2,7 @@ package com.emirk.movieapp.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.emirk.movieapp.data.local.entity.MovieEntity
 import com.emirk.movieapp.data.repository.MovieRepositoryImpl
 import com.emirk.movieapp.domain.mapper.MovieEntityMapper
@@ -11,10 +12,7 @@ import com.emirk.movieapp.utils.DataState
 import com.emirk.movieapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,10 +27,38 @@ class HomeViewModel @Inject constructor(
     val movies: StateFlow<DataState<List<MovieEntity?>>>
         get() = _movies
 
-    val popularMovies = repository.getPopularMovies(viewModelScope)
-    val topRatedMovies = repository.getTopRatedMovies(viewModelScope)
-    val upComingMovies = repository.getUpComingMovies(viewModelScope)
-    val nowPlayingMovies = repository.getNowPlayingMovies(viewModelScope)
+    private val _getPopularMovies: MutableStateFlow<Flow<PagingData<MovieUiModel>>> =
+        MutableStateFlow(emptyFlow())
+    val getPopularMovies: StateFlow<Flow<PagingData<MovieUiModel>>>
+        get() = _getPopularMovies
+
+    private val _getTopRatedMovies: MutableStateFlow<Flow<PagingData<MovieUiModel>>> =
+        MutableStateFlow(emptyFlow())
+    val getTopRatedMovies: StateFlow<Flow<PagingData<MovieUiModel>>>
+        get() = _getTopRatedMovies
+
+    private val _getUpComingMovies: MutableStateFlow<Flow<PagingData<MovieUiModel>>> =
+        MutableStateFlow(emptyFlow())
+    val getUpComingMovies: StateFlow<Flow<PagingData<MovieUiModel>>>
+        get() = _getUpComingMovies
+
+    fun getPopularMovies() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _getPopularMovies.value = repository.getPopularMovies(this)
+        }
+    }
+
+    fun getTopRatedMovies() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _getTopRatedMovies.value = repository.getTopRatedMovies(this)
+        }
+    }
+
+    fun getUpComingMovies() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _getUpComingMovies.value = repository.getUpComingMovies(this)
+        }
+    }
 
     suspend fun addWatchLaterMovie(movieUi: MovieUiModel) {
         val movieEntity = MovieEntityMapper().mapToEntity(movieUi)

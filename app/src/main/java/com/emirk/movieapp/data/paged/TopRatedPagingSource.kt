@@ -13,7 +13,7 @@ class TopRatedPagingSource(private val apiService: ApiService) :
         val page = params.key ?: STARTING_PAGE_INDEX
         return try {
             val movieUiModel =
-                MovieNetworkMapper().fromNetworkList(apiService.getPopularMovies(page).movies)
+                MovieNetworkMapper().fromNetworkList(apiService.getTopRatedMovies(page).movies)
             LoadResult.Page(
                 data = movieUiModel,
                 prevKey = if (page == STARTING_PAGE_INDEX) null else page.minus(1),

@@ -1,4 +1,5 @@
 package com.emirk.movieapp.di.network
+
 import com.emirk.movieapp.data.remote.ApiService
 import com.emirk.movieapp.data.remote.util.ApiConstants
 import dagger.Module
@@ -16,7 +17,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideConverterFactory():GsonConverterFactory{
+    fun provideConverterFactory(): GsonConverterFactory {
         return GsonConverterFactory.create()
     }
 
@@ -24,7 +25,7 @@ object NetworkModule {
     @Provides
     fun provideRetrofitAPI(
         gsonConverterFactory: GsonConverterFactory
-    ): Retrofit{
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(ApiConstants.BASE_URL)
             .addConverterFactory(gsonConverterFactory)

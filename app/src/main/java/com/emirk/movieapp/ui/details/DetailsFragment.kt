@@ -20,9 +20,6 @@ class DetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailsBinding
     private val viewModel: DetailsViewModel by viewModels()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
